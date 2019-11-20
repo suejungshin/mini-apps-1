@@ -16,5 +16,8 @@
     "jquery": "^3.4.1",
     "nodemon": "^1.19.4",
     "path": "^0.12.7"
+  },
+  "dependencies": {
+    "express-fileupload": "^1.1.6"
   }
 }

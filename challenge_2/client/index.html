@@ -3,10 +3,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <body>
 <div>Hello from index.html</div>
+
 <form id="form" action='http://localhost:3000/data' method='post'>
     <textarea name="inputText" value="Put JSON here"></textarea>
     <button>Submit</button>
 </form>
+
+<form action='http://localhost:3000/data2' method='POST' enctype="multipart/form-data">
+  <input type="file" name="files" id="filePicker" ></input>
+  <input type="submit" onSubmit="handleFiles" />
+</form>
+
 <div id="app"></div>
 </body>
 

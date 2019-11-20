@@ -1,13 +1,17 @@
 const express = require('express');
-const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const fileUpload = require('express-fileupload');
+const app = express();
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', express.static(path.join(__dirname, 'client')))
+
+app.use(fileUpload());
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
@@ -62,7 +66,7 @@ const createCSV = function (jsonText, callback) {
 
   fs.writeFile('result.csv', dataToWrite, 'utf8', (err) => {
     if (err) {
-      // do something meaningful
+      callback(err);
     } else {
       callback();
     }
@@ -70,9 +74,39 @@ const createCSV = function (jsonText, callback) {
 }
 
 app.post('/data', (req, res) => {
-  createCSV(req.body.inputText, ()=> {
+  createCSV(req.body.inputText, (err) => {
+    if (err) {
+      res.status(400).send();
+    }
     res.sendFile(path.join(__dirname, 'result.csv'))
   });
+});
+
+app.post('/data2', (req, res) => {
+  console.log('im here hello')
+  //console.log(req)
+  console.log(req.files.files.data)
+  fs.readFile(req.files.files.data, (err, data) => {
+    if (err) {
+      res.status(400).send();
+    }
+    console.log(typeof data)
+    console.log("data: ", data)
+    createCSV(data, (err) => {
+      if (err) {
+        res.status(400).send();
+      }
+      res.sendFile(path.join(__dirname, 'result.csv'));
+    })
+  })
+
+  //fs.readFile(req)
+  // createCSV(req.body.inputText, (err) => {
+  //   if (err) {
+  //     res.status(400).send();
+  //   }
+  //   res.sendFile(path.join(__dirname, 'result.csv'))
+  // });
 });
 
 

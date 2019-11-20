@@ -1,5 +1,16 @@
 
-document.getElementById("input")
+
+const inputElement = document.getElementById("filePicker");
+
+const handleFiles = function() {
+  const fileList = this.files;
+  let postRequest = new XMLHttpRequest();
+  postRequest.open('POST', 'http://localhost:3000/data2', true);
+  postRequest.send(fileList);
+
+}
+
+inputElement.addEventListener("change", handleFiles, false);
 
 // let postRequest = new XMLHttpRequest();
 // postRequest.open('POST', 'http://localhost:3000/test');
