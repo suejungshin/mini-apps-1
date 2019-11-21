@@ -71,14 +71,15 @@ const Form1 = props => {
   return React.createElement("div", null, React.createElement("form", {
     name: "F1"
   }, formFieldsArray[0].map((element, index) => {
-    return React.createElement("input", {
+    return React.createElement("div", {
+      key: index
+    }, React.createElement("label", null, element), React.createElement("input", {
       type: "text",
       name: element,
       onChange: props.onTextInputChange,
       placeholder: element,
-      innerText: element,
-      key: index
-    });
+      innerText: element
+    }));
   }), React.createElement("button", {
     type: "submit",
     onClick: props.onSubmitClick
@@ -89,14 +90,15 @@ const Form2 = props => {
   return React.createElement("div", null, React.createElement("form", {
     name: "F2"
   }, formFieldsArray[1].map((element, index) => {
-    return React.createElement("input", {
+    return React.createElement("div", {
+      key: index
+    }, React.createElement("label", null, element), React.createElement("input", {
       type: "text",
       name: element,
       onChange: props.onTextInputChange,
       placeholder: element,
-      innerText: element,
-      key: index
-    });
+      innerText: element
+    }));
   }), React.createElement("button", {
     type: "submit",
     onClick: props.onSubmitClick
@@ -107,14 +109,15 @@ const Form3 = props => {
   return React.createElement("div", null, React.createElement("form", {
     name: "F3"
   }, formFieldsArray[2].map((element, index) => {
-    return React.createElement("input", {
+    return React.createElement("div", {
+      key: index
+    }, React.createElement("label", null, element), React.createElement("input", {
       type: "text",
       name: element,
       onChange: props.onTextInputChange,
       placeholder: element,
-      innerText: element,
-      key: index
-    });
+      innerText: element
+    }));
   }), React.createElement("button", {
     type: "submit",
     onClick: props.onSubmitClick
@@ -122,7 +125,7 @@ const Form3 = props => {
 };
 
 const LastScreen = props => {
-  return React.createElement("div", null, JSON.stringify(props.state.formObj), React.createElement("button", {
+  return React.createElement("div", null, React.createElement("div", null, "Does the below look OK?"), JSON.stringify(props.state.formObj), React.createElement("button", {
     type: "submit",
     onClick: props.onSubmitClick
   }, "Purchase"));

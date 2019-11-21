@@ -77,7 +77,10 @@ const Form1 = (props) => {
     <div>
       <form name="F1" >
         {formFieldsArray[0].map((element, index) => {
-          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+          return <div key={index}>
+          <label>{element}</label>
+          <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} ></input>
+          </div>
         })
         }
         <button type="submit" onClick={props.onSubmitClick}>Submit</button>
@@ -91,7 +94,10 @@ const Form2 = (props) => {
     <div>
       <form name="F2">
         {formFieldsArray[1].map((element, index) => {
-          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+          return <div key={index}>
+            <label>{element}</label>
+            <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} ></input>
+            </div>
         })
         }
         <button type="submit" onClick={props.onSubmitClick}>Submit</button>
@@ -105,7 +111,10 @@ const Form3 = (props) => {
     <div>
       <form name="F3">
         {formFieldsArray[2].map((element, index) => {
-          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+          return <div key={index}>
+          <label>{element}</label>
+          <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} ></input>
+          </div>
         })
         }
         <button type="submit" onClick={props.onSubmitClick}>Submit</button>
@@ -117,6 +126,7 @@ const Form3 = (props) => {
 const LastScreen = (props) => {
   return (
     <div>
+      <div>Does the below look OK?</div>
       {JSON.stringify(props.state.formObj)}
       <button type="submit" onClick={props.onSubmitClick}>Purchase</button>
     </div>
