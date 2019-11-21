@@ -2,20 +2,24 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      password: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      phoneNum: '',
-      creditCardNum: '',
-      expiryDate: '',
-      CVV: '',
-      billingZip: ''
+      displayedForm: '',
+      formObj: {
+        name: '',
+        email: '',
+        password: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        phoneNum: '',
+        creditCardNum: '',
+        expiryDate: '',
+        CVV: '',
+        billingZip: ''
+      }
     };
+    this.onCheckoutClick = this.onCheckoutClick.bind(this);
     this.onTextInputChange = this.onTextInputChange.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
     this.F1 = React.createElement("div", null, React.createElement("form", {
@@ -23,16 +27,19 @@ class App extends React.Component {
     }, React.createElement("input", {
       type: "text",
       name: "name",
-      onChange: this.onTextInputChange
-    }, "Name"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "name"
+    }), React.createElement("input", {
       type: "text",
       name: "email",
-      onChange: this.onTextInputChange
-    }, "Email"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "email"
+    }), React.createElement("input", {
       type: "text",
       name: "password",
-      onChange: this.onTextInputChange
-    }, "Password"), React.createElement("button", {
+      onChange: this.onTextInputChange,
+      placeholder: "password"
+    }), React.createElement("button", {
       type: "submit",
       onClick: this.onSubmitClick
     }, "Submit")));
@@ -42,28 +49,34 @@ class App extends React.Component {
     }, React.createElement("input", {
       type: "text",
       name: "addressLine1",
-      onChange: this.onTextInputChange
-    }, "Address Line 1"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "Address Line 1"
+    }), React.createElement("input", {
       type: "text",
       name: "addressLine2",
-      onChange: this.onTextInputChange
-    }, "Address Line 2"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "Address Line 2"
+    }), React.createElement("input", {
       type: "text",
       name: "city",
-      onChange: this.onTextInputChange
-    }, "City"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "city"
+    }), React.createElement("input", {
       type: "text",
       name: "state",
-      onChange: this.onTextInputChange
-    }, "State"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "state"
+    }), React.createElement("input", {
       type: "text",
       name: "zipCode",
-      onChange: this.onTextInputChange
-    }, "Zip Code"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "zipCode"
+    }), React.createElement("input", {
       type: "text",
       name: "phoneNum",
-      onChange: this.onTextInputChange
-    }, "Phone Number"), React.createElement("button", {
+      onChange: this.onTextInputChange,
+      placeholder: "phone number"
+    }), React.createElement("button", {
       type: "submit",
       onClick: this.onSubmitClick
     }, "Submit")));
@@ -72,30 +85,41 @@ class App extends React.Component {
     }, React.createElement("input", {
       type: "text",
       name: "creditCardNum",
-      onChange: this.onTextInputChange
-    }, "Credit Card Number"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "credit card number"
+    }), React.createElement("input", {
       type: "text",
       name: "expiryDate",
-      onChange: this.onTextInputChange
-    }, "Expiry Date"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "expiration date"
+    }), React.createElement("input", {
       type: "text",
       name: "CVV",
-      onChange: this.onTextInputChange
-    }, "CVV"), React.createElement("input", {
+      onChange: this.onTextInputChange,
+      placeholder: "CVV"
+    }), React.createElement("input", {
       type: "text",
       name: "billingZip",
-      onChange: this.onTextInputChange
-    }, "Billing Zip Code"), React.createElement("button", {
+      onChange: this.onTextInputChange,
+      placeholder: "billing zip code"
+    }), React.createElement("button", {
       type: "submit",
       onClick: this.onSubmitClick
     }, "Submit")));
+  }
+
+  onCheckoutClick(event) {
+    event.preventDefault();
+    this.setState({
+      displayedForm: this.F1
+    });
   }
 
   onTextInputChange(event) {
     event.preventDefault();
     let key = event.target.name;
     this.setState(state => {
-      state[key] = event.target.value;
+      state.formObj[key] = event.target.value;
       return state;
     });
     console.log(this.state);
@@ -103,17 +127,33 @@ class App extends React.Component {
 
   onSubmitClick(event) {
     event.preventDefault();
-    console.log(this.state);
     $.ajax({
       method: "POST",
       url: "http://localhost:3000/data",
-      data: this.state
+      data: this.state.formObj
+    });
+    this.setState(state => {
+      if (state.displayedForm === this.F1) {
+        state.displayedForm = this.F2;
+      } else if (state.displayedForm === this.F2) {
+        state.displayedForm = this.F3;
+      } else if (state.displayedForm === this.F3) {
+        state.displayedForm = React.createElement("div", null, JSON.stringify(this.state.formObj), React.createElement("button", {
+          type: "submit",
+          onClick: this.onSubmitClick
+        }, "Purchase"));
+      } else if (state.displayedForm === this.F4) {
+        state.displayedForm = React.createElement("div", null, "All Done!!!");
+      }
+
+      return state;
     });
   }
 
   render() {
-    let displayedPage = this.F1;
-    return React.createElement("div", null, React.createElement("div", null, "Here's my Mini App!"), React.createElement("button", null, "Checkout"), displayedPage);
+    return React.createElement("div", null, React.createElement("div", null, "Here's my Mini App!"), React.createElement("button", {
+      onClick: this.onCheckoutClick
+    }, "Checkout"), this.state.displayedForm);
   }
 
 }

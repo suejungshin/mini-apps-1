@@ -19,7 +19,5 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.post('/data', (req, res) => {
   console.log(req.body)
-
   res.status(200).send();
-
 })
