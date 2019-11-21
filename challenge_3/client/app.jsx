@@ -4,7 +4,7 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      displayedForm: '',
+      displayedForm: 0,
       formObj: {
         name: '',
         email: '',
@@ -25,51 +25,12 @@ class App extends React.Component {
     this.onCheckoutClick = this.onCheckoutClick.bind(this);
     this.onTextInputChange = this.onTextInputChange.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
-
-    this.F1 =
-      <div>
-        <form name="F1" >
-          <input type="text" name="name" onChange={this.onTextInputChange} placeholder="name"></input>
-          <input type="text" name="email" onChange={this.onTextInputChange} placeholder="email"></input>
-          <input type="text" name="password" onChange={this.onTextInputChange} placeholder="password"></input>
-          <button type="submit" onClick={this.onSubmitClick}>Submit</button>
-        </form>
-      </div>
-
-    this.F2 =
-      <div>
-        <form name="F2" onSubmit={this.onSubmitClick}>
-          <input type="text" name="addressLine1" onChange={this.onTextInputChange} placeholder="Address Line 1"></input>
-          <input type="text" name="addressLine2" onChange={this.onTextInputChange} placeholder="Address Line 2"></input>
-          <input type="text" name="city" onChange={this.onTextInputChange} placeholder="city"></input>
-          <input type="text" name="state" onChange={this.onTextInputChange} placeholder="state"></input>
-          <input type="text" name="zipCode" onChange={this.onTextInputChange} placeholder="zipCode"></input>
-          <input type="text" name="phoneNum" onChange={this.onTextInputChange} placeholder="phone number"></input>
-          <button type="submit" onClick={this.onSubmitClick}>Submit</button>
-        </form>
-      </div>
-
-    this.F3 =
-      <div>
-        <form name="F3">
-          <input type="text" name="creditCardNum" onChange={this.onTextInputChange} placeholder="credit card number"></input>
-          <input type="text" name="expiryDate" onChange={this.onTextInputChange} placeholder="expiration date"></input>
-          <input type="text" name="CVV" onChange={this.onTextInputChange} placeholder="CVV"></input>
-          <input type="text" name="billingZip" onChange={this.onTextInputChange} placeholder="billing zip code"></input>
-          <button type="submit" onClick={this.onSubmitClick}>Submit</button>
-        </form>
-      </div>
-
-
-
   }
-
 
   onCheckoutClick(event) {
     event.preventDefault();
-    this.setState({ displayedForm: this.F1 })
+    this.setState({ displayedForm: 1 })
   }
-
 
   onTextInputChange(event) {
     event.preventDefault();
@@ -78,7 +39,6 @@ class App extends React.Component {
       state.formObj[key] = event.target.value;
       return state;
     })
-    console.log(this.state)
   }
 
   onSubmitClick(event) {
@@ -90,33 +50,93 @@ class App extends React.Component {
     })
 
     this.setState((state) => {
-      if (state.displayedForm === this.F1) {
-        state.displayedForm = this.F2
-      } else if (state.displayedForm === this.F2) {
-        state.displayedForm = this.F3
-      } else if (state.displayedForm === this.F3) {
-        state.displayedForm =
-          <div>
-            {JSON.stringify(this.state.formObj)}
-            <button type="submit" onClick={this.onSubmitClick}>Purchase</button>
-          </div>
-      } else if (state.displayedForm === this.F4) {
-        state.displayedForm = <div>All Done!!!</div>
-      }
+      state.displayedForm++;
       return state;
     });
   }
 
-
   render() {
-
     return (
       <div>
         <div>Here's my Mini App!</div>
         <button onClick={this.onCheckoutClick}>Checkout</button>
-        {this.state.displayedForm}
+        <ConditionalRender state={this.state} onSubmitClick={this.onSubmitClick} onTextInputChange={this.onTextInputChange}></ConditionalRender>
       </div>
     )
+  }
+}
+
+const formFieldsArray = [
+  ["name", "email", "password"],
+  ["addressLine1", "addressLine2", "city", "state", "zipCode", "phoneNum"],
+  ["creditCardNum", "expiryDate", "CVV", "billingZip"]
+]
+
+const Form1 = (props) => {
+  return (
+    <div>
+      <form name="F1" >
+        {formFieldsArray[0].map((element, index) => {
+          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+        })
+        }
+        <button type="submit" onClick={props.onSubmitClick}>Submit</button>
+      </form>
+    </div >
+  )
+}
+
+const Form2 = (props) => {
+  return (
+    <div>
+      <form name="F2">
+        {formFieldsArray[1].map((element, index) => {
+          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+        })
+        }
+        <button type="submit" onClick={props.onSubmitClick}>Submit</button>
+      </form>
+    </div>
+  )
+}
+
+const Form3 = (props) => {
+  return (
+    <div>
+      <form name="F3">
+        {formFieldsArray[2].map((element, index) => {
+          return <input type="text" name={element} onChange={props.onTextInputChange} placeholder={element} innerText={element} key={index}></input>
+        })
+        }
+        <button type="submit" onClick={props.onSubmitClick}>Submit</button>
+      </form>
+    </div>
+  )
+}
+
+const LastScreen = (props) => {
+  return (
+    <div>
+      {JSON.stringify(props.state.formObj)}
+      <button type="submit" onClick={props.onSubmitClick}>Purchase</button>
+    </div>
+  )
+}
+
+const ConditionalRender = (props) => {
+  console.log(props.state)
+  if (props.state.displayedForm === 0) {
+    return <div>Click checkout to complete your purchase</div>
+  } else if (props.state.displayedForm === 1) {
+    return <Form1 onSubmitClick={props.onSubmitClick} onTextInputChange={props.onTextInputChange}></Form1>
+  } else if (props.state.displayedForm === 2) {
+    return <Form2 onSubmitClick={props.onSubmitClick} onTextInputChange={props.onTextInputChange}></Form2>
+  } else if (props.state.displayedForm === 3) {
+    return <Form3 onSubmitClick={props.onSubmitClick} onTextInputChange={props.onTextInputChange}></Form3>
+  } else if (props.state.displayedForm === 4) {
+    return <LastScreen state={props.state} onSubmitClick={props.onSubmitClick} onTextInputChange={props.onTextInputChange}></LastScreen>
+  } else {
+    return <div>All done!!!!</div>
   }
 }
 
